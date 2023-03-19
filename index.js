@@ -8,6 +8,15 @@ const app = express()
 
 const conn = require('./db/conn')
 
+// Models
+const Thought = require('./models/Thought')
+const User = require('./models/User')
+
+// import routes
+
+const thoughtsRoutes = require('./routes/thoughtsRoutes');
+const ThoughtController = require('./controllers/ThoughtController');
+
 app.engine('handlebars', engine());
 app.set('view engine', 'handlebars');
 
@@ -32,9 +41,9 @@ app.use(
         }),
         cookie: {
             secure: false,
-            maxAge: 360000,
+            maxAge: 360000, // um dia
             expires: new Date(Date.now() + 360000),
-            httpOnly: true
+            httpOnly: true // trocar isso ao mandar pra prod
         }
     })
 )
@@ -54,7 +63,13 @@ app.use((req, res, next) => {
     next()
 })
 
+// Routes
+app.use('/thoughts', thoughtsRoutes)
+
+app.get('/', ThoughtController.showThoughts)
+
 conn
+    // .sync({force: true})
     .sync()
     .then(() => {
         app.listen(3000)
