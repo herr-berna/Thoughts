@@ -15,6 +15,7 @@ const User = require('./models/User')
 // import routes
 
 const thoughtsRoutes = require('./routes/thoughtsRoutes');
+const authRoutes = require('./routes/authRoutes');
 const ThoughtController = require('./controllers/ThoughtController');
 
 app.engine('handlebars', engine());
@@ -65,6 +66,7 @@ app.use((req, res, next) => {
 
 // Routes
 app.use('/thoughts', thoughtsRoutes)
+app.use('/', authRoutes)
 
 app.get('/', ThoughtController.showThoughts)
 
